@@ -270,6 +270,15 @@
 
         <div class="menu-panel">
             <div class="menu-label">-- Select Example --</div>
+            <!--
+                Demo list. Two sibling pages list the same demos and are
+                maintained by hand alongside this one:
+                examples/localhost/index.html (the same set as this page) and
+                examples/standalone/index.html (the subset that ships a
+                standalone build). A new demo needs an entry in every list
+                that covers it. examples/localhost/testGame is a development
+                harness rather than a demo and is deliberately unlisted.
+            -->
             <ul class="menu-list" id="menu">
                 <li class="menu-item">
                     <a href="./examples/localhost/basic/index.html" tabindex="0">
@@ -279,6 +288,29 @@
                             <span class="item-desc"
                                 >Dungeon generation, turn-based movement,<br />combat
                                 events and ASCII map rendering.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/camera-modes/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Camera Modes</span>
+                            <span class="item-desc"
+                                >firstPerson, thirdPerson, topDown, and free<br />(mouse
+                                orbit/pan/zoom) camera modes via<br />setCameraMode.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/mouse-handlers/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Mouse Handlers</span>
+                            <span class="item-desc"
+                                >onCellHover and onCellClick via floor-plane<br />raycasting. Hover tints a cell, click<br />highlights the whole region. Press R for<br />debug region-colour overlay.</span
                             >
                         </span>
                     </a>
@@ -303,6 +335,64 @@
                                 >Ceiling and floor height offsets driven<br />by
                                 distance-to-wall mask. Vaulted rooms<br />and
                                 open pits.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/floor-skirt-uv/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Secret Door</span>
+                            <span class="item-desc"
+                                >Two rooms with a stone button that opens<br />a hidden door — ceiling skirt animates<br />upward like a rising portcullis.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/doors/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Doors</span>
+                            <span class="item-desc"
+                                >Lockable, animated portcullis door —<br />double-sided frame/pane sandwich lit<br />identically to walls. Unlock and bump.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/sky/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Sky</span>
+                            <span class="item-desc"
+                                >Procedural night-sky skybox with open-sky<br />ceilings in room interiors. Press R<br />to regenerate with a new seed.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/lighting/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Lighting</span>
+                            <span class="item-desc"
+                                >THREE.PointLight integration via<br />renderer.addLight()
+                                — a flickering player<br />torch plus placed wall
+                                sconces.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/ambient-occlusion/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Ambient Occlusion</span>
+                            <span class="item-desc"
+                                >Pre-baked vertex AO on floors, ceilings<br />and walls.
+                                Slider drives<br />setAmbientOcclusion() at runtime.</span
                             >
                         </span>
                     </a>
@@ -345,7 +435,7 @@
                         </span>
                     </a>
                 </li>
-                <li class="menu-item" style="grid-column: 1 / -1;">
+                <li class="menu-item">
                     <a href="./examples/localhost/inventory/index.html" tabindex="0">
                         <span class="cursor">&#9658;</span>
                         <span class="item-body">
@@ -353,6 +443,45 @@
                             <span class="item-desc"
                                 >Inventory dialog with equipment slots,<br />stat bars,
                                 drag-and-drop, and<br />keybinding-driven navigation.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/texture-loader/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Texture Loader</span>
+                            <span class="item-desc"
+                                >loadTextureAtlas() — fetch a TexturePacker<br />atlas,
+                                repack sprites into a POT texture,<br />and resolve
+                                by name or id.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="./examples/localhost/sky-panels/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Sky Panels</span>
+                            <span class="item-desc"
+                                >Sky panels on ceiling cells facing open-sky<br />zones.
+                                distanceToWall drives which cells<br />get a ceiling vs.
+                                open sky.</span
+                            >
+                        </span>
+                    </a>
+                </li>
+                <li class="menu-item" style="grid-column: 1 / -1;">
+                    <a href="./examples/localhost/multiplayer/index.html" tabindex="0">
+                        <span class="cursor">&#9658;</span>
+                        <span class="item-body">
+                            <span class="item-name">Multiplayer</span>
+                            <span class="item-desc"
+                                >WebSocket-based co-op dungeon crawl.<br />First player
+                                becomes host and generates<br />the dungeon. Requires
+                                npm run multiplayer.</span
                             >
                         </span>
                     </a>
