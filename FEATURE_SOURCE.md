@@ -265,7 +265,7 @@ Generation (`runGenerate`) advances through `tickUntilPlayer()` (step 11), then 
 ### Pluggable combat model
 
 **Files:**
-- `combat/factions.ts` — `FactionRegistry`, `FactionStance`, `FactionId`; `createFactionRegistry()` (empty registry, dev defines all stances); `createFactionRegistryFromTable()` convenience builder; no `DEFAULT_FACTION_TABLE` — dev owns all faction relationships; `game.factions` is the top-level handle on the game object
+- `combat/factions.ts` — `FactionRegistry`, `FactionStance`, `FactionId`; `createFactionRegistry()` (empty registry, dev defines all stances); `createFactionRegistryFromTable()` convenience builder; `DEFAULT_FACTION_TABLE` is an **opt-in** stance table (player/npc ↔ enemy hostile, everything else neutral) — `createGame()` does not apply it, so the dev still owns all faction relationships unless it is passed to `createFactionRegistryFromTable()` explicitly; not re-exported from `index.ts`, so it is unavailable to script-tag consumers; `game.factions` is the top-level handle on the game object
 - `combat/combat.ts` — `CombatResolver` function type `(attacker, defender, ctx) => CombatResult`; `CombatResolverContext { emit, factions }`; `CombatResult` union (`blocked` | `miss` | `hit`); `resolveCombat({ attacker, defender, damage, defenderHp, factions, emit })` utility for event emission + faction check when the caller pre-computes damage; no default damage formula — stat field names are dev-defined; `CombatOptions.resolver` replaces the old `damageFormula` option; engine fallback (no resolver) performs stance check only, no damage
 - `entities/effects.ts` — `RpsEffect` and status effect application called from combat resolution
 - `turn/events.ts` — `DamageEvent`, `MissEvent`, `DeathEvent`, `XpGainEvent`, `HealEvent` emitted by combat
@@ -500,9 +500,8 @@ Demonstrates ten core systems through a set of chained and parallel missions. Mi
 Also adds: `attachMinimap` on a `<canvas>` overlay; per-mission progress display in `renderMissions()`; F / U keybindings for interact and use-item.
 
 **Files:**
-- `examples/tutorial/index.html`
-- `examples/tutorial/styles.css`
-- `examples/tutorial/tutorial.js`
+- `examples/localhost/tutorial/index.html`, `examples/localhost/tutorial/styles.css`, `examples/localhost/tutorial/tutorial.js`
+- `examples/standalone/tutorial/` — same demo with the atlas embedded as a Base64 data URL
 
 ---
 
@@ -574,4 +573,20 @@ Self-contained save/load layer that wraps a `SerializedDungeon` with all setting
 - `api/player.ts` — player handle and action methods
 - `api/actions.ts` — action pipeline middleware
 - `api/keybindings.ts` — DOM keybinding attachment
-- `index.ts` — re-exports the public `AtomicCore` namespace: `createGame`, `attachMinimap`, `attachSpawner`, `attachDecorator`, `attachSurfacePainter`, `attachKeybindings`, `createEntity`, `createItem`, `createFactionRegistry`, `createFactionRegistryFromTable`, `createWebSocketTransport`, `packedAtlasResolver`, `loadSkybox`, `generateCellularDungeon`, `setSkyPanelCount`, `setCeilingPanelCount`; types: `EntityCoreOpts`, `CombatResolver`, `CombatResolverContext`, `CombatResult`, `FactionRegistry`, `FactionStance`, `FactionId`, `SkyboxFaces`, `SkyboxOptions`, `RoomedDungeonOutputs`, `CellularOptions`, `CellularDungeonOutputs`, `SpawnChooserContext`
+- `index.ts` — re-exports the public `AtomicCore` namespace. `src/lib/index.ts` is the authority; the IIFE bundle's `window.AtomicCore` is exactly what it re-exports, so a symbol exported from its own module but absent here is unreachable from a `<script>` tag. Runtime (value) exports, grouped by subsystem:
+  - **Game / setup** — `createGame`, `attachMinimap`, `attachSpawner`, `attachDecorator`, `attachSurfacePainter`, `attachKeybindings`
+  - **Entities** — `createEntity`, `createItem`
+  - **Rendering** — `createDungeonRenderer`, `loadSkybox`, `createDoorMesh`
+  - **Texture loader** — `loadTextureAtlas`, `loadMultiAtlas`, `resolveSprite`, `toFaceRotation`, `packedAtlasResolver`, `spriteToUvRect`
+  - **Themes** — `THEMES`, `THEME_KEYS`, `resolveTheme`, `registerTheme`, `getTheme`
+  - **Dungeon generation / cell writers** — `generateCellularDungeon`, `loadTiledMap`, `setFloorSkirtTiles`, `setCeilSkirtTiles`, `setSkyPanelCount`, `setCeilingPanelCount`, `setFloorHeightOffset`, `setCeilingHeightOffset`
+  - **Collider flags** — `IS_WALKABLE`, `IS_BLOCKED`, `IS_LIGHT_PASSABLE`, `buildColliderFlags`, `colliderFlagsFromSolid`, `isWalkableCell`, `isBlockedCell`, `isLightPassableCell`
+  - **Map file import/export** — `exportDungeonMap`, `dungeonMapToJson`, `importDungeonMap`, `dungeonMapFromJson`
+  - **Doors** — `findDoorCandidates`, `wallOffDoorGroup`, `computeDoorProgress`
+  - **Easing** — `linear`, `easeInQuad`, `easeOutQuad`, `easeInOutQuad`, `easeInCubic`, `easeOutCubic`, `easeInOutCubic`, `EASINGS`, `resolveEasing`
+  - **Combat / factions** — `createFactionRegistry`, `createFactionRegistryFromTable`
+  - **Transport** — `createWebSocketTransport`
+  - **UI** — `showInventory`
+  - **Utilities** — `makeRng`
+
+  Type-only exports accompany each group (renderer, atlas, theme, door, mission, inventory-UI, animation, combat, transport, entity, turn and map-file types); see the `export type` lines in `index.ts` for the exact set.

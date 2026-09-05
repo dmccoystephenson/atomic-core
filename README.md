@@ -96,7 +96,7 @@ This starts a static file server at `http://localhost:3000` (or the next availab
 
 ## Examples
 
-The `examples/` directory contains two sets of identical demos organized by how you intend to open them.
+The `examples/` directory contains two sets of demos organized by how you intend to open them. `examples/localhost/` carries the full set; `examples/standalone/` mirrors the subset of those demos that works without a server.
 
 ### localhost examples
 
@@ -120,6 +120,8 @@ Available standalone examples:
 | `minimap/` | `attachMinimap()` canvas overlay |
 | `themes/` | Built-in dungeon theme presets |
 | `inventory/` | `showInventory()` dialog UI |
+| `texture-loader/` | `loadTextureAtlas()` shelf packer — packed texture preview and name/id lookup |
+| `tutorial/` | Mission-driven walkthrough with `attachMinimap()` HUD |
 
 ---
 
@@ -144,7 +146,13 @@ Available standalone examples:
   </script>
   <script src="/dist/atomic-core.iife.js" defer></script>
   <script defer>
-    const { createGame, createEntity, attachSpawner, attachKeybindings, createDungeonRenderer } = AtomicCore
+    const {
+      createGame,
+      attachKeybindings,
+      createDungeonRenderer,
+      loadTextureAtlas,
+      packedAtlasResolver,
+    } = AtomicCore
 
     const game = createGame(document.body, {
       dungeon: {
@@ -165,31 +173,30 @@ Available standalone examples:
       },
     })
 
-    // Load the tile atlas image, then create the 3D renderer
-    const atlasImg = new Image()
-    atlasImg.onload = () => {
+    // Pack the tile atlas, then create the 3D renderer
+    async function init() {
+      const atlasJson = await fetch('./textureAtlas.json').then(r => r.json())
+      const packed    = await loadTextureAtlas('./textureAtlas.png', atlasJson)
+      const resolver  = packedAtlasResolver(packed)
+
       const renderer = createDungeonRenderer(
         document.getElementById('viewport'),
         game,
         {
-          atlas: {
-            image:       atlasImg,
-            tileWidth:   64,
-            tileHeight:  64,
-            sheetWidth:  512,
-            sheetHeight: 1024,
-            columns:     8,
-          },
-          floorTileId: 20,  // row-major tile index into the atlas sheet
-          ceilTileId:  19,
-          wallTileId:  16,
+          packedAtlas:      packed,
+          tileNameResolver: resolver,
+          // Tile options accept a sprite name (resolved via tileNameResolver)
+          // or a numeric atlas tile index.
+          floorTile: 'flagstone_floor_stone.png',
+          ceilTile:  'plaster_ceiling.png',
+          wallTile:  'brick_wall_stone.png',
         },
       )
 
       // Generate the dungeon - must be called after attaching all callbacks
       game.generate()
     }
-    atlasImg.src = './atlas.png'
+    init()
 
     // Keyboard input
     attachKeybindings(game, {
