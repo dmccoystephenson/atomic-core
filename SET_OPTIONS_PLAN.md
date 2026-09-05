@@ -2,11 +2,17 @@
 
 Implements the full `SetCellOptions` type for `game.dungeon.set(x, y, spriteName, options?)`.
 
-**Current state:** Only `applyTextureTo` is wired. All other proposed fields exist on the type  
-definition but are ignored at runtime.
+**Current state:** Phases 1–3 have shipped. `set()` now wires `applyTextureTo`, `floorSkirt`,  
+`ceilingSkirt`, `skyPanelCount`, `ceilingPanelCount`, `floorHeightOffset`, `ceilingHeightOffset`,  
+`solid` and `colliderFlags`. Only `hazard` and `temperature` (Phase 4) remain defined on the type  
+but ignored at runtime.
+
+Note on Phase 3: the `128 + steps` encoding described below is commented out in the shipped `set()`  
+body, and `setFloorHeightOffset()` / `setCeilingHeightOffset()` write their argument to the texture  
+raw. Callers currently pass the encoded byte themselves.
 
 **Key files:**
-- `src/lib/api/createGame.ts` — `SetCellOptions` type (line 101), `set()` body (line 810)
+- `src/lib/api/createGame.ts` — `SetCellOptions` type (line 177), `set()` body (line 1516)
 - `src/lib/dungeon/bsp.ts` — low-level texture-channel helpers (`setFloorSkirtTiles`, etc.)
 - `src/lib/dungeon/colliderFlags.ts` — flag constants and `buildColliderFlags`
 
